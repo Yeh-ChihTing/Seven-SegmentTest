@@ -19,28 +19,28 @@ namespace Seven_SegmentTest
             InitializeComponent();
         }
 
-        private Mybox box = new Mybox();
+        private Mybox box = new();
 
         private bool StarChooseCol = false;
 
         //int cntCol = 0;
 
-        private Mat img = new Mat();
+        private Mat img = new();
         private Image Get7Pic;
 
         private bool sevensegadd = false;
         private int SegPointCnt = 0;
 
-        private bool FirstAdd = true;
+       // private bool FirstAdd = true;
 
         //private int cntNumOfSevenSeg = 0;
 
 
-        private List<sevensegBox> SevenCList = new List<sevensegBox>();
+        private List<sevensegBox> SevenCList = new ();
 
-        private List<List<sevensegBox>> AllSegList = new List<List<sevensegBox>>();
+        private List<List<sevensegBox>> AllSegList = new();
 
-        private List<string> AnsList = new List<string>();
+        private List<string> AnsList = new();
 
         private void MainScene_Load(object sender, EventArgs e)
         {
@@ -56,7 +56,7 @@ namespace Seven_SegmentTest
             /// <summary>
             /// カメラ画面取得
             /// </summary>
-            VideoCapture vc = new VideoCapture();
+            VideoCapture vc = new();
 
 
            
@@ -176,7 +176,7 @@ namespace Seven_SegmentTest
                 if (SegPointCnt < maxSeg)
                 {
                                      
-                    sevensegBox box = new sevensegBox();
+                    sevensegBox box = new();
                     SevenSegPic.Controls.Add(box);
                     box.Height = SevenSegPic.Height / 80;
                     box.Width = SevenSegPic.Width / 80;
@@ -187,7 +187,7 @@ namespace Seven_SegmentTest
 
                     if (SegPointCnt == maxSeg)
                     {
-                        List<sevensegBox> Sbox = new List<sevensegBox>();
+                        List<sevensegBox> Sbox = new();
                         for (int i = 0; i < SevenCList.Count; i++)
                         {
                             Sbox.Add(SevenCList[i]);
@@ -212,10 +212,10 @@ namespace Seven_SegmentTest
 
         private void Set7ToBack_Click(object sender, EventArgs e)
         {
-            Get7Pic = SevenSegPic.Image;
+            //Get7Pic = SevenSegPic.Image;
 
-            Bitmap BackImage = (Bitmap)Get7Pic.Clone();
-            int r, g, b;
+            //Bitmap BackImage = (Bitmap)Get7Pic.Clone();
+            //int r, g, b;
             //if (SevenCList.Count == 8)
             //{
                
@@ -476,7 +476,10 @@ namespace Seven_SegmentTest
             }
 
             label1.Text = AnsList[0];
-            //label2.Text = AnsList[cnt];
+            if (AnsList.Count >= 2)
+            {
+                label2.Text = AnsList[1];
+            }
         }
 
         private void LoopCheck_Tick(object sender, EventArgs e)

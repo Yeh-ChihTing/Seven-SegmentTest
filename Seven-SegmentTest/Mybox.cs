@@ -126,7 +126,7 @@ namespace Seven_SegmentTest
             eight
         }
 
-        public List<sevensegBox> SboxList = new List<sevensegBox>();
+        public List<sevensegBox> SboxList = new();
         public int Add7SegCnt = 0;
         public int New7Max = 8;
 
@@ -134,7 +134,7 @@ namespace Seven_SegmentTest
 
    
         // 標準のカーソル
-        private Cursor defaultCursor;
+        private Cursor defaultCursor { get; set; }
         //サイズ変更の時位置の移動をブラック用
         private bool ReSize = false;
 
@@ -173,7 +173,7 @@ namespace Seven_SegmentTest
             int right = this.ClientRectangle.Right - 3;
             int bottom = this.ClientRectangle.Bottom - 3;
 
-            Pen pen = new Pen(this._borderColor, 3);
+            Pen pen = new(this._borderColor, 3);
 
             // 四角を描画
             Graphics g = this.CreateGraphics();
@@ -215,7 +215,7 @@ namespace Seven_SegmentTest
                 {
                     if (Add7SegCnt < New7Max)
                     {
-                        sevensegBox box = new sevensegBox();
+                        sevensegBox box = new();
                         this.Controls.Add(box);
                         box.Height = this.Height / 30;
                         box.Width = this.Width / 30;
@@ -241,7 +241,7 @@ namespace Seven_SegmentTest
             ResizeDirection cursorPos = ResizeDirection.None;
 
             //上の判定ボックス生成
-            Rectangle topRect = new Rectangle(0, -5, this.Width, 10);
+            Rectangle topRect = new(0, -5, this.Width, 10);
             //当たり判定
             if (topRect.Contains(e.Location))
             {
@@ -251,7 +251,7 @@ namespace Seven_SegmentTest
 
 
             // 左の判定ボックス生成
-            Rectangle leftRect = new Rectangle(-5, 0, 10, this.Height);
+            Rectangle leftRect = new(-5, 0, 10, this.Height);
             //当たり判定
             if (leftRect.Contains(e.Location))
             {
@@ -260,7 +260,7 @@ namespace Seven_SegmentTest
 
 
             // 下の判定ボックス生成
-            Rectangle bottomRect = new Rectangle(0, this.Height - 10, this.Width, this.Height);
+            Rectangle bottomRect = new(0, this.Height - 10, this.Width, this.Height);
             //当たり判定
             if (bottomRect.Contains(e.Location))
             {
@@ -268,7 +268,7 @@ namespace Seven_SegmentTest
             }
 
             // 右の判定ボックス生成
-            Rectangle rightRect = new Rectangle(this.Width - 10, 0, this.Width, this.Height);
+            Rectangle rightRect = new(this.Width - 10, 0, this.Width, this.Height);
             //当たり判定
             if (rightRect.Contains(e.Location))
             {
@@ -438,7 +438,7 @@ namespace Seven_SegmentTest
                         if (this.Location.X + this.Width <= PWeight && this.Location.X >= 0 &&
                             this.Location.Y >= 0 && this.Location.Y <= PHeight)
                         {
-                            Point mp = new Point(e.X - OriginPoint.X + this.Location.X, e.Y - OriginPoint.Y + this.Location.Y);
+                            Point mp = new(e.X - OriginPoint.X + this.Location.X, e.Y - OriginPoint.Y + this.Location.Y);
                             this.Location = mp;
                         }
 
@@ -551,7 +551,7 @@ namespace Seven_SegmentTest
                 {
                     if (Add7SegCnt < New7Max)
                     {
-                        sevensegBox box = new sevensegBox();
+                        sevensegBox box = new();
                         this.Controls.Add(box);
                         box.Location = e.Location;
                         MyNumber.Text = (Add7SegCnt+1).ToString();
