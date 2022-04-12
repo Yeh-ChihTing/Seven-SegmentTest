@@ -33,7 +33,6 @@ namespace Seven_SegmentTest
             this.SevenSegPic = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.Add7seg = new System.Windows.Forms.Button();
-            this.Set7ToBack = new System.Windows.Forms.Button();
             this.Set7SegCol = new System.Windows.Forms.Button();
             this.SegOnCol = new System.Windows.Forms.Panel();
             this.ClearAllSeg = new System.Windows.Forms.Button();
@@ -48,8 +47,12 @@ namespace Seven_SegmentTest
             this.ShowCol = new System.Windows.Forms.ComboBox();
             this.ShowAns = new System.Windows.Forms.ListBox();
             this.GetCam = new System.Windows.Forms.Timer(this.components);
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.PerScreen = new System.Windows.Forms.ComboBox();
+            this.AllOneCol = new System.Windows.Forms.CheckBox();
+            this.SetAnalogPos = new System.Windows.Forms.Button();
+            this.AnalogCheck = new System.Windows.Forms.Button();
+            this.AnalogCol = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.SevenSegPic)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -87,16 +90,6 @@ namespace Seven_SegmentTest
             this.Add7seg.UseVisualStyleBackColor = true;
             this.Add7seg.Click += new System.EventHandler(this.Add7seg_Click);
             // 
-            // Set7ToBack
-            // 
-            this.Set7ToBack.Location = new System.Drawing.Point(30, 491);
-            this.Set7ToBack.Name = "Set7ToBack";
-            this.Set7ToBack.Size = new System.Drawing.Size(82, 23);
-            this.Set7ToBack.TabIndex = 3;
-            this.Set7ToBack.Text = "セット7セグ";
-            this.Set7ToBack.UseVisualStyleBackColor = true;
-            this.Set7ToBack.Click += new System.EventHandler(this.Set7ToBack_Click);
-            // 
             // Set7SegCol
             // 
             this.Set7SegCol.Location = new System.Drawing.Point(725, 131);
@@ -126,7 +119,7 @@ namespace Seven_SegmentTest
             // 
             // Get7Seg
             // 
-            this.Get7Seg.Location = new System.Drawing.Point(713, 198);
+            this.Get7Seg.Location = new System.Drawing.Point(714, 227);
             this.Get7Seg.Name = "Get7Seg";
             this.Get7Seg.Size = new System.Drawing.Size(114, 23);
             this.Get7Seg.TabIndex = 10;
@@ -171,7 +164,7 @@ namespace Seven_SegmentTest
             // LoopOnOff
             // 
             this.LoopOnOff.BackColor = System.Drawing.Color.Red;
-            this.LoopOnOff.Location = new System.Drawing.Point(713, 243);
+            this.LoopOnOff.Location = new System.Drawing.Point(744, 256);
             this.LoopOnOff.Name = "LoopOnOff";
             this.LoopOnOff.Size = new System.Drawing.Size(75, 23);
             this.LoopOnOff.TabIndex = 15;
@@ -193,7 +186,7 @@ namespace Seven_SegmentTest
             // ShowCol
             // 
             this.ShowCol.FormattingEnabled = true;
-            this.ShowCol.Location = new System.Drawing.Point(713, 160);
+            this.ShowCol.Location = new System.Drawing.Point(714, 160);
             this.ShowCol.Name = "ShowCol";
             this.ShowCol.Size = new System.Drawing.Size(121, 23);
             this.ShowCol.TabIndex = 17;
@@ -202,7 +195,7 @@ namespace Seven_SegmentTest
             // 
             this.ShowAns.FormattingEnabled = true;
             this.ShowAns.ItemHeight = 15;
-            this.ShowAns.Location = new System.Drawing.Point(714, 377);
+            this.ShowAns.Location = new System.Drawing.Point(720, 348);
             this.ShowAns.Name = "ShowAns";
             this.ShowAns.Size = new System.Drawing.Size(120, 94);
             this.ShowAns.TabIndex = 18;
@@ -210,16 +203,7 @@ namespace Seven_SegmentTest
             // GetCam
             // 
             this.GetCam.Enabled = true;
-            this.GetCam.Interval = 300;
             this.GetCam.Tick += new System.EventHandler(this.GetCam_Tick);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(0, 0);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 23);
-            this.comboBox1.TabIndex = 19;
             // 
             // PerScreen
             // 
@@ -228,18 +212,72 @@ namespace Seven_SegmentTest
             "100%",
             "200%",
             "400%"});
-            this.PerScreen.Location = new System.Drawing.Point(12, 419);
+            this.PerScreen.Location = new System.Drawing.Point(702, 12);
             this.PerScreen.Name = "PerScreen";
             this.PerScreen.Size = new System.Drawing.Size(76, 23);
             this.PerScreen.TabIndex = 20;
+            // 
+            // AllOneCol
+            // 
+            this.AllOneCol.AutoSize = true;
+            this.AllOneCol.Checked = true;
+            this.AllOneCol.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.AllOneCol.Location = new System.Drawing.Point(736, 189);
+            this.AllOneCol.Name = "AllOneCol";
+            this.AllOneCol.Size = new System.Drawing.Size(62, 19);
+            this.AllOneCol.TabIndex = 21;
+            this.AllOneCol.Text = "色統一";
+            this.AllOneCol.UseVisualStyleBackColor = true;
+            // 
+            // SetAnalogPos
+            // 
+            this.SetAnalogPos.Location = new System.Drawing.Point(13, 441);
+            this.SetAnalogPos.Name = "SetAnalogPos";
+            this.SetAnalogPos.Size = new System.Drawing.Size(102, 23);
+            this.SetAnalogPos.TabIndex = 22;
+            this.SetAnalogPos.Text = "アナログ位置設定";
+            this.SetAnalogPos.UseVisualStyleBackColor = true;
+            this.SetAnalogPos.Click += new System.EventHandler(this.SetAnalogPos_Click);
+            // 
+            // AnalogCheck
+            // 
+            this.AnalogCheck.Location = new System.Drawing.Point(13, 493);
+            this.AnalogCheck.Name = "AnalogCheck";
+            this.AnalogCheck.Size = new System.Drawing.Size(102, 23);
+            this.AnalogCheck.TabIndex = 23;
+            this.AnalogCheck.Text = "アナログ値チェック";
+            this.AnalogCheck.UseVisualStyleBackColor = true;
+            this.AnalogCheck.Click += new System.EventHandler(this.AnalogCheck_Click);
+            // 
+            // AnalogCol
+            // 
+            this.AnalogCol.Location = new System.Drawing.Point(170, 493);
+            this.AnalogCol.Name = "AnalogCol";
+            this.AnalogCol.Size = new System.Drawing.Size(71, 23);
+            this.AnalogCol.TabIndex = 24;
+            this.AnalogCol.Text = "指針色";
+            this.AnalogCol.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(283, 493);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 15);
+            this.label1.TabIndex = 25;
+            this.label1.Text = "label1";
             // 
             // MainScene
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 611);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.AnalogCol);
+            this.Controls.Add(this.AnalogCheck);
+            this.Controls.Add(this.SetAnalogPos);
+            this.Controls.Add(this.AllOneCol);
             this.Controls.Add(this.PerScreen);
-            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.ShowAns);
             this.Controls.Add(this.ShowCol);
             this.Controls.Add(this.LoopOnOff);
@@ -251,7 +289,6 @@ namespace Seven_SegmentTest
             this.Controls.Add(this.ClearAllSeg);
             this.Controls.Add(this.SegOnCol);
             this.Controls.Add(this.Set7SegCol);
-            this.Controls.Add(this.Set7ToBack);
             this.Controls.Add(this.Add7seg);
             this.Controls.Add(this.panel1);
             this.Name = "MainScene";
@@ -269,7 +306,6 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.PictureBox SevenSegPic;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button Add7seg;
-        private System.Windows.Forms.Button Set7ToBack;
         private System.Windows.Forms.Button Set7SegCol;
         private System.Windows.Forms.Panel SegOnCol;
         private System.Windows.Forms.Button ClearAllSeg;
@@ -284,8 +320,12 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.ComboBox ShowCol;
         private System.Windows.Forms.ListBox ShowAns;
         private System.Windows.Forms.Timer GetCam;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox PerScreen;
+        private System.Windows.Forms.CheckBox AllOneCol;
+        private System.Windows.Forms.Button SetAnalogPos;
+        private System.Windows.Forms.Button AnalogCheck;
+        private System.Windows.Forms.Button AnalogCol;
+        private System.Windows.Forms.Label label1;
     }
 }
 
