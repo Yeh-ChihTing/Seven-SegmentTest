@@ -36,7 +36,6 @@ namespace Seven_SegmentTest
             this.Set7ToBack = new System.Windows.Forms.Button();
             this.Set7SegCol = new System.Windows.Forms.Button();
             this.SegOnCol = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.ClearAllSeg = new System.Windows.Forms.Button();
             this.Get7Seg = new System.Windows.Forms.Button();
             this.digitTex = new System.Windows.Forms.TextBox();
@@ -46,7 +45,11 @@ namespace Seven_SegmentTest
             this.LoopOnOff = new System.Windows.Forms.Button();
             this.LoopCheck = new System.Windows.Forms.Timer(this.components);
             this.statusCheck = new System.Windows.Forms.Timer(this.components);
-            this.label2 = new System.Windows.Forms.Label();
+            this.ShowCol = new System.Windows.Forms.ComboBox();
+            this.ShowAns = new System.Windows.Forms.ListBox();
+            this.GetCam = new System.Windows.Forms.Timer(this.components);
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.PerScreen = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.SevenSegPic)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -111,15 +114,6 @@ namespace Seven_SegmentTest
             this.SegOnCol.Size = new System.Drawing.Size(25, 19);
             this.SegOnCol.TabIndex = 5;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(713, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 15);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "label1";
-            // 
             // ClearAllSeg
             // 
             this.ClearAllSeg.Location = new System.Drawing.Point(725, 52);
@@ -172,7 +166,7 @@ namespace Seven_SegmentTest
             this.ColNearTex.Name = "ColNearTex";
             this.ColNearTex.Size = new System.Drawing.Size(78, 23);
             this.ColNearTex.TabIndex = 13;
-            this.ColNearTex.Text = "65";
+            this.ColNearTex.Text = "30";
             // 
             // LoopOnOff
             // 
@@ -196,21 +190,58 @@ namespace Seven_SegmentTest
             this.statusCheck.Interval = 500;
             this.statusCheck.Tick += new System.EventHandler(this.statusCheck_Tick);
             // 
-            // label2
+            // ShowCol
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(790, 22);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 15);
-            this.label2.TabIndex = 16;
-            this.label2.Text = "label2";
+            this.ShowCol.FormattingEnabled = true;
+            this.ShowCol.Location = new System.Drawing.Point(713, 160);
+            this.ShowCol.Name = "ShowCol";
+            this.ShowCol.Size = new System.Drawing.Size(121, 23);
+            this.ShowCol.TabIndex = 17;
+            // 
+            // ShowAns
+            // 
+            this.ShowAns.FormattingEnabled = true;
+            this.ShowAns.ItemHeight = 15;
+            this.ShowAns.Location = new System.Drawing.Point(714, 377);
+            this.ShowAns.Name = "ShowAns";
+            this.ShowAns.Size = new System.Drawing.Size(120, 94);
+            this.ShowAns.TabIndex = 18;
+            // 
+            // GetCam
+            // 
+            this.GetCam.Enabled = true;
+            this.GetCam.Interval = 300;
+            this.GetCam.Tick += new System.EventHandler(this.GetCam_Tick);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(0, 0);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 23);
+            this.comboBox1.TabIndex = 19;
+            // 
+            // PerScreen
+            // 
+            this.PerScreen.FormattingEnabled = true;
+            this.PerScreen.Items.AddRange(new object[] {
+            "100%",
+            "200%",
+            "400%"});
+            this.PerScreen.Location = new System.Drawing.Point(12, 419);
+            this.PerScreen.Name = "PerScreen";
+            this.PerScreen.Size = new System.Drawing.Size(76, 23);
+            this.PerScreen.TabIndex = 20;
             // 
             // MainScene
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 611);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.PerScreen);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.ShowAns);
+            this.Controls.Add(this.ShowCol);
             this.Controls.Add(this.LoopOnOff);
             this.Controls.Add(this.ColNear);
             this.Controls.Add(this.ColNearTex);
@@ -218,7 +249,6 @@ namespace Seven_SegmentTest
             this.Controls.Add(this.digitTex);
             this.Controls.Add(this.Get7Seg);
             this.Controls.Add(this.ClearAllSeg);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.SegOnCol);
             this.Controls.Add(this.Set7SegCol);
             this.Controls.Add(this.Set7ToBack);
@@ -242,7 +272,6 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.Button Set7ToBack;
         private System.Windows.Forms.Button Set7SegCol;
         private System.Windows.Forms.Panel SegOnCol;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ClearAllSeg;
         private System.Windows.Forms.Button Get7Seg;
         private System.Windows.Forms.TextBox digitTex;
@@ -252,7 +281,11 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.Button LoopOnOff;
         private System.Windows.Forms.Timer LoopCheck;
         private System.Windows.Forms.Timer statusCheck;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox ShowCol;
+        private System.Windows.Forms.ListBox ShowAns;
+        private System.Windows.Forms.Timer GetCam;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox PerScreen;
     }
 }
 

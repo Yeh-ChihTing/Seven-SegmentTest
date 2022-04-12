@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 
+
 namespace Seven_SegmentTest
 {
     public partial class MainScene : Form
@@ -31,6 +32,8 @@ namespace Seven_SegmentTest
         private bool sevensegadd = false;
         private int SegPointCnt = 0;
 
+        private bool FirstColSel = true;
+
        // private bool FirstAdd = true;
 
         //private int cntNumOfSevenSeg = 0;
@@ -40,11 +43,13 @@ namespace Seven_SegmentTest
 
         private List<List<sevensegBox>> AllSegList = new();
 
-        private List<string> AnsList = new();
+        // private List<string> AnsList = new();
+        private Image CameraImg { get; set; }
+
 
         private void MainScene_Load(object sender, EventArgs e)
         {
-
+            PerScreen.SelectedIndex = 0;
            //Mybox box = new Mybox();
            // SevenSegPic.Controls.Add(box);
 
@@ -93,7 +98,7 @@ namespace Seven_SegmentTest
                             img = vc.RetrieveMat();
 
                             //変換したMatをbitmapに変換そしてカメライメージとして表示
-                            SevenSegPic.Image = img.ToBitmap();
+                            CameraImg = img.ToBitmap();
                             
 
                         }
@@ -144,7 +149,7 @@ namespace Seven_SegmentTest
 
                 this.Cursor = Cursors.Hand;
                 SegOnCol.BackColor = Color.FromArgb(color.R, color.G, color.B);
-
+               
 
                 //cntCol = 0;
                
@@ -163,6 +168,12 @@ namespace Seven_SegmentTest
             {
                  StarChooseCol = false;
                 this.Cursor = Cursors.Default;
+                ShowCol.Items.Add(SegOnCol.BackColor);
+                if (FirstColSel)
+                {
+                    ShowCol.SelectedIndex = 0;
+                    FirstColSel = false;
+                }
             }
 
 
@@ -177,9 +188,10 @@ namespace Seven_SegmentTest
                 {
                                      
                     sevensegBox box = new();
+                    //panel1.Controls[0].Controls.Add(box);
                     SevenSegPic.Controls.Add(box);
-                    box.Height = SevenSegPic.Height / 80;
-                    box.Width = SevenSegPic.Width / 80;
+                    box.Height = 4;// SevenSegPic.Height / 80;
+                    box.Width = 8;// SevenSegPic.Width / 80;
                     box.Location = e.Location;
                     //MyNumber.Text = Add7SegCnt.ToString();
                     SegPointCnt++;
@@ -260,6 +272,18 @@ namespace Seven_SegmentTest
             SegPointCnt = 0;
 
             AllSegList.Clear();
+
+            FirstColSel = true;
+
+            DialogResult result=MessageBox.Show("色もリセットします？","", MessageBoxButtons.YesNo);
+
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+
+                ShowCol.Items.Clear();
+                ShowCol.Text = "";
+                ShowCol.BackColor = default;
+            }
         }
 
        
@@ -292,10 +316,8 @@ namespace Seven_SegmentTest
             Bitmap BackImage = (Bitmap)Get7Pic.Clone();
             int r, g, b;
 
-            AnsList.Clear();
-
-
-
+            ShowAns.Items.Clear();
+            //AnsList.Clear();
 
             //if (SevenCList.Count >= Convert.ToInt32(digitTex.Text) * 8)
             //{
@@ -308,34 +330,46 @@ namespace Seven_SegmentTest
             {
                 for (int i = 0; i < Convert.ToInt32(digitTex.Text) * 8; i++)
                 {
+                    int w = AllSegList[cnt][i].Width;
+                    int h = AllSegList[cnt][i].Height;
 
-                    r = BackImage.GetPixel(AllSegList[cnt][i].Location.X, AllSegList[cnt][i].Location.Y).R;
-                    g = BackImage.GetPixel(AllSegList[cnt][i].Location.X, AllSegList[cnt][i].Location.Y).G;
-                    b = BackImage.GetPixel(AllSegList[cnt][i].Location.X, AllSegList[cnt][i].Location.Y).B;
+                    r = BackImage.GetPixel(AllSegList[cnt][i].Location.X + w, AllSegList[cnt][i].Location.Y + h).R;
+                    g = BackImage.GetPixel(AllSegList[cnt][i].Location.X + w, AllSegList[cnt][i].Location.Y + h).G;
+                    b = BackImage.GetPixel(AllSegList[cnt][i].Location.X + w, AllSegList[cnt][i].Location.Y + h).B;
                     Color col = Color.FromArgb(255, r, g, b);
                     AllSegList[cnt][i].setCol(col);
                 }
             }
 
-
+           
             for (int cnt = 0; cnt < AllSegList.Count; cnt++)
             {
                 Show7Seg = "";
+                
+
+                string[] GetColStr = ShowCol.Items[cnt].ToString().Split(',', ']');
+                int[] GetCol = new int[3];
+                for (int i = 0; i < 3; i++)
+                {
+                    string[] GetC = GetColStr[i + 1].Split('=', ']');
+                    GetCol[i] = Convert.ToInt32(GetC[1]);
+                }
+                Color SegCol = Color.FromArgb(255, GetCol[0], GetCol[1], GetCol[2]);
+
 
                 for (int i = 0; i < Convert.ToInt32(digitTex.Text); i++)
                 {
                     int nowcnetseg = i * 8;
-
-                   
+                  
                     //0
                     if (
-                            (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                            (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                            (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                            (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                            (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                            (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                            (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                            (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                            (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                            (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                            (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                            (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                            (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                            (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                             )
                     {
                         Show7Seg += "0";
@@ -343,124 +377,124 @@ namespace Seven_SegmentTest
 
                     //1
                     else if (
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                      (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                       )
                     {
                         Show7Seg += "1";
                     }
                     //2
                     else if (
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                      (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                       )
                     {
                         Show7Seg += "2";
                     }
                     //3
                     else if (
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                      (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                       )
                     {
                         Show7Seg += "3";
                     }
                     //4
                     else if (
-                      (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                       )
                     {
                         Show7Seg += "4";
                     }
                     //5
                     else if (
-                      (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                       )
                     {
                         Show7Seg += "5";
                     }
                     //6
                     else if (
-                      (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                       )
                     {
                         Show7Seg += "6";
                     }
                     //7
                     else if (
-                      (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                       )
                     {
                         Show7Seg += "7";
                     }
                     //8
                     else if (
-                      (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                       )
                     {
                         Show7Seg += "8";
                     }
                     //9
                     else if (
-                      (IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegOnCol.BackColor)) &&
-                      (!IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegOnCol.BackColor)) &&
-                      (IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegOnCol.BackColor))
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 0].MyCol, SegCol)) &&
+                      (IsNear(AllSegList[cnt][nowcnetseg + 1].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 2].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 3].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 4].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 5].MyCol, SegCol)) &&
+                      (!IsNear(AllSegList[cnt][nowcnetseg + 6].MyCol, SegCol))
                       )
                     {
                         Show7Seg += "9";
                     }
 
                     //.
-                    if (IsNear(AllSegList[cnt][nowcnetseg + 7].MyCol, SegOnCol.BackColor))
+                    if (!IsNear(AllSegList[cnt][nowcnetseg + 7].MyCol, SegCol))
                     {
                         Show7Seg += ".";
                     }
@@ -469,17 +503,13 @@ namespace Seven_SegmentTest
                     //label1.Text = Show7Seg;
                 }
                 // }
-                AnsList.Add(Show7Seg);
-                
+                //AnsList.Add(Show7Seg);
+                ShowAns.Items.Add(Show7Seg);
                 
 
             }
 
-            label1.Text = AnsList[0];
-            if (AnsList.Count >= 2)
-            {
-                label2.Text = AnsList[1];
-            }
+            
         }
 
         private void LoopCheck_Tick(object sender, EventArgs e)
@@ -511,6 +541,24 @@ namespace Seven_SegmentTest
             {
                 LoopOnOff.BackColor = Color.Red;
             }
+
+            if (ShowCol.Items.Count >= 1)
+            {
+                string[] GetColStr = ShowCol.SelectedItem.ToString().Split(',', ']');
+                int[] GetCol = new int[3];
+                for(int i = 0; i < 3; i++)
+                {
+                    string[] GetC = GetColStr[i+1].Split('=',']');
+                    GetCol[i] = Convert.ToInt32(GetC[1]);
+                }
+                ShowCol.BackColor = Color.FromArgb(255, GetCol[0], GetCol[1], GetCol[2]);
+            }
+
+        }
+
+        private void GetCam_Tick(object sender, EventArgs e)
+        {
+            SevenSegPic.Image = CameraImg;
         }
     }
 }
