@@ -53,21 +53,26 @@ namespace Seven_SegmentTest
             this.AnalogCheck = new System.Windows.Forms.Button();
             this.AnalogCol = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.AnalogReset = new System.Windows.Forms.Button();
+            this.AnalogColBox = new System.Windows.Forms.PictureBox();
+            this.NearCol = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.SevenSegPic)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AnalogColBox)).BeginInit();
             this.SuspendLayout();
             // 
             // SevenSegPic
             // 
+            this.SevenSegPic.BackColor = System.Drawing.Color.Transparent;
             this.SevenSegPic.ErrorImage = null;
             this.SevenSegPic.InitialImage = null;
-            this.SevenSegPic.Location = new System.Drawing.Point(18, 20);
+            this.SevenSegPic.Location = new System.Drawing.Point(16, 21);
             this.SevenSegPic.Name = "SevenSegPic";
-            this.SevenSegPic.Size = new System.Drawing.Size(640, 360);
+            this.SevenSegPic.Size = new System.Drawing.Size(616, 344);
             this.SevenSegPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.SevenSegPic.TabIndex = 0;
             this.SevenSegPic.TabStop = false;
-            this.SevenSegPic.WaitOnLoad = true;
             this.SevenSegPic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SevenSegPic_MouseDown);
             this.SevenSegPic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.SevenSegPic_MouseMove);
             // 
@@ -75,9 +80,9 @@ namespace Seven_SegmentTest
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.panel1.Controls.Add(this.SevenSegPic);
-            this.panel1.Location = new System.Drawing.Point(12, 12);
+            this.panel1.Location = new System.Drawing.Point(18, 19);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(684, 401);
+            this.panel1.Size = new System.Drawing.Size(660, 385);
             this.panel1.TabIndex = 1;
             // 
             // Add7seg
@@ -212,7 +217,7 @@ namespace Seven_SegmentTest
             "100%",
             "200%",
             "400%"});
-            this.PerScreen.Location = new System.Drawing.Point(702, 12);
+            this.PerScreen.Location = new System.Drawing.Point(714, 12);
             this.PerScreen.Name = "PerScreen";
             this.PerScreen.Size = new System.Drawing.Size(76, 23);
             this.PerScreen.TabIndex = 20;
@@ -257,21 +262,61 @@ namespace Seven_SegmentTest
             this.AnalogCol.TabIndex = 24;
             this.AnalogCol.Text = "指針色";
             this.AnalogCol.UseVisualStyleBackColor = true;
+            this.AnalogCol.Click += new System.EventHandler(this.AnalogCol_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(283, 493);
+            this.label1.Location = new System.Drawing.Point(327, 497);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 15);
             this.label1.TabIndex = 25;
             this.label1.Text = "label1";
+            // 
+            // AnalogReset
+            // 
+            this.AnalogReset.Location = new System.Drawing.Point(13, 536);
+            this.AnalogReset.Name = "AnalogReset";
+            this.AnalogReset.Size = new System.Drawing.Size(88, 23);
+            this.AnalogReset.TabIndex = 26;
+            this.AnalogReset.Text = "アナログリセット";
+            this.AnalogReset.UseVisualStyleBackColor = true;
+            this.AnalogReset.Click += new System.EventHandler(this.AnalogReset_Click);
+            // 
+            // AnalogColBox
+            // 
+            this.AnalogColBox.Location = new System.Drawing.Point(247, 498);
+            this.AnalogColBox.Name = "AnalogColBox";
+            this.AnalogColBox.Size = new System.Drawing.Size(27, 18);
+            this.AnalogColBox.TabIndex = 27;
+            this.AnalogColBox.TabStop = false;
+            // 
+            // NearCol
+            // 
+            this.NearCol.Location = new System.Drawing.Point(203, 522);
+            this.NearCol.Name = "NearCol";
+            this.NearCol.Size = new System.Drawing.Size(38, 23);
+            this.NearCol.TabIndex = 28;
+            this.NearCol.Text = "10";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(327, 516);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(38, 15);
+            this.label2.TabIndex = 29;
+            this.label2.Text = "label2";
             // 
             // MainScene
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 611);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.NearCol);
+            this.Controls.Add(this.AnalogColBox);
+            this.Controls.Add(this.AnalogReset);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.AnalogCol);
             this.Controls.Add(this.AnalogCheck);
@@ -296,6 +341,7 @@ namespace Seven_SegmentTest
             this.Load += new System.EventHandler(this.MainScene_Load);
             ((System.ComponentModel.ISupportInitialize)(this.SevenSegPic)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.AnalogColBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,6 +372,10 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.Button AnalogCheck;
         private System.Windows.Forms.Button AnalogCol;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button AnalogReset;
+        private System.Windows.Forms.PictureBox AnalogColBox;
+        private System.Windows.Forms.TextBox NearCol;
+        private System.Windows.Forms.Label label2;
     }
 }
 
