@@ -58,7 +58,7 @@ namespace Seven_SegmentTest
         private bool SetAnalogCol = false;
 
         private int CntStandPos = 0;
-        private int StandPosMax = 4;
+        private int StandPosMax = 3;
 
 
 
@@ -68,9 +68,9 @@ namespace Seven_SegmentTest
         const Int32 O_DOT = 5;      // 点Oの円の半径
 
 
-        Bitmap m_Bmp;
-        Graphics m_Graphic;
-        Font m_Font;
+        //Bitmap m_Bmp;
+        //Graphics m_Graphic;
+        //Font m_Font;
         System.Drawing.Point m_P;     // 点Pの座標（PictureBoxの中心）
         System.Drawing.Point m_Q;     // 点Qの座標
         System.Drawing.Point m_O;     // 点Oの座標
@@ -192,7 +192,7 @@ namespace Seven_SegmentTest
                 Color color = ((Bitmap)Get7Pic).GetPixel(e.X, e.Y);
 
 
-                this.Cursor = Cursors.Hand;
+               // this.Cursor = Cursors.Hand;
                 SegOnCol.BackColor = Color.FromArgb(color.R, color.G, color.B);
                
 
@@ -205,7 +205,7 @@ namespace Seven_SegmentTest
                 Color color = ((Bitmap)SevenSegPic.Image).GetPixel(e.X, e.Y);
 
 
-                this.Cursor = Cursors.Hand;
+                //this.Cursor = Cursors.Hand;
                 AnalogColBox.BackColor = Color.FromArgb(color.R, color.G, color.B);
 
             }
@@ -221,7 +221,7 @@ namespace Seven_SegmentTest
 
             if (StarChooseCol)
             {              
-                this.Cursor = Cursors.Default;
+               // this.Cursor = Cursors.Default;
                 ShowCol.Items.Add(SegOnCol.BackColor);
 
                 StarChooseCol = false;
@@ -234,7 +234,7 @@ namespace Seven_SegmentTest
 
             if (SetAnalogCol)
             {
-                this.Cursor = Cursors.Default;
+               // this.Cursor = Cursors.Default;
 
                 //AnalogBox.DefaultBackColor=
                 label1.Text = AnalogColBox.BackColor.ToString();
@@ -323,7 +323,6 @@ namespace Seven_SegmentTest
             }
             //SevenSegPic1.Controls.Clear();
             
-
            // SevenCList.Clear();
             SegPointCnt = 0;
 
@@ -356,7 +355,7 @@ namespace Seven_SegmentTest
 
         private bool IsNear(Color aObj, Color bObj)
         {
-            int ColLike = Convert.ToInt32(ColNearTex.Text);
+            int ColLike = Convert.ToInt32(SegNearCol.Text);
 
             if (aObj.R <= bObj.R + ColLike && aObj.R >= bObj.R - ColLike&&
                 aObj.G <= bObj.G + ColLike && aObj.G >= bObj.G - ColLike&&
@@ -642,7 +641,17 @@ namespace Seven_SegmentTest
 
         private void GetCam_Tick(object sender, EventArgs e)
         {
-            SevenSegPic.Image = CameraImg;
+            if (CameraImg != null)
+            {
+                if (!AnaOr7Seg.Checked)
+                {
+                    SevenSegPic.Image = CameraImg;
+                }
+                else
+                {
+                    SevenSegPic.Image = IsNearWhite(CameraImg);
+                }
+            }
             // スライドの値を取得
             //double dblAngle = (double)trackBar1.Value;
 
@@ -665,12 +674,19 @@ namespace Seven_SegmentTest
 
         private void CheckAnaLog()
         {
+            int w = AllAnaBox[0].Width / 2;
+            int h = AllAnaBox[0].Height / 2;
             //int AB, AC, BC;
             //AB =(int) GetLong(AllAnaBox[0].Location, AllAnaBox[1].Location);
             //AC =(int) GetLong(AllAnaBox[0].Location, AllAnaBox[2].Location);
             //BC = (int)GetLong(AllAnaBox[1].Location, AllAnaBox[2].Location);
 
-            int AD= (int)GetLong(AllAnaBox[0].Location, AllAnaBox[3].Location);
+            System.Drawing.Point Pos1 = new System.Drawing.Point(AllAnaBox[0].Location.X + w, AllAnaBox[0].Location.Y + h);
+            System.Drawing.Point Pos2 = new System.Drawing.Point(AllAnaBox[1].Location.X + w, AllAnaBox[1].Location.Y + h);
+            System.Drawing.Point Pos3 = new System.Drawing.Point(AllAnaBox[2].Location.X + w, AllAnaBox[2].Location.Y + h);
+            //System.Drawing.Point Pos4 = new System.Drawing.Point(AllAnaBox[3].Location.X + w, AllAnaBox[3].Location.Y + h);
+
+            //int AD= (int)GetLong(Pos1, Pos4);
 
             //int AngleAB = (int)GetAngle(AllAnaBox[0].Location, AllAnaBox[1].Location);
             //int AngleAC = (int)GetAngle(AllAnaBox[0].Location, AllAnaBox[2].Location);
@@ -680,35 +696,36 @@ namespace Seven_SegmentTest
 
             //AnalogAngle = 180 - AngleAB - AngleAC;
 
-            AnalogAngle = (int) GetIsoscelesAngle(AllAnaBox[0].Location, AllAnaBox[1].Location, AllAnaBox[2].Location);
+            AnalogAngle = (int) GetIsoscelesAngle(Pos1, Pos2, Pos3);
             //double angel = Math.Tan;
             //PointOneAngle = (180 - PointOneAngle - 90)*2;
 
-            System.Drawing.Point pos = GetPos(AllAnaBox[0].Location, AllAnaBox[1].Location,0);
+            System.Drawing.Point pos = GetPos(Pos1, Pos2, 0);
 
             
             //int a = 0;
 
 
             // 点P・Qの座標を設定
-            m_P = AllAnaBox[0].Location;
-            m_Q = AllAnaBox[1].Location;
+            m_P = Pos1;
+            m_Q = Pos2;
             m_O = new System.Drawing.Point();
 
-            LINE = ((int)Math.Sqrt((Math.Pow(m_Q.X - m_P.X, 2) + Math.Pow(m_Q.Y - m_P.Y, 2)))/20)*18;
+            LINE = ((int)Math.Sqrt((Math.Pow(m_Q.X - m_P.X, 2) + Math.Pow(m_Q.Y - m_P.Y, 2)))/20)*17;
 
+            
 
-
-            int angel=(int)GetIAngel(AllAnaBox[0].Location, AllAnaBox[1].Location);
+            int angel=(int)GetIAngel(Pos1, Pos2);
 
             int starPosAngle = angel + 180;
 
-           
-            for(int i = 0; i < AnalogAngle; i++)
+            AnalogBox box = new();
+
+            for (int i = 0; i < AnalogAngle; i++)
             {
                 GetOPos(starPosAngle+i);
-                Get7Pic = SevenSegPic.Image;
-                Bitmap BackImage = (Bitmap)Get7Pic.Clone();
+                //Get7Pic = SevenSegPic.Image;
+                Bitmap BackImage = new Bitmap(SevenSegPic.Image);
                 int r, g, b;
 
                 r = BackImage.GetPixel(m_O.X,m_O.Y).R;
@@ -717,21 +734,36 @@ namespace Seven_SegmentTest
 
                 Color col = Color.FromArgb(255, r, g, b);
 
-                //if (IsNearForAnalog(col, AnalogCol.BackColor))
-                //{
-                    AnalogBox box = new();
+                //AnalogBox boxx = new();
+                //SevenSegPic.Controls.Add(boxx);
+                //boxx.Location = m_O;
+                //boxx.BackColor = Color.Black;
+                //boxx.Width = 3;
+                //boxx.Height = 3;
+                //boxx.pictureBox1.BackColor = Color.Blue;
+
+               
+
+                if (IsNearForAnalog(col, AnalogColBox.BackColor))
+                {
+                   
                     SevenSegPic.Controls.Add(box);
-                    box.Location = m_O;
+                    box.Location = new System.Drawing.Point(m_O.X, m_O.Y);
                     box.BackColor = Color.Black;
-                    box.Width = 4;
-                    box.Height = 8;
-                    box.pictureBox1.BackColor = Color.Black;
-                    //break;
-              // }
+                    box.Width = 10;
+                    box.Height = 10;
+                    box.pictureBox1.BackColor = Color.Purple;
+                    break;
+
+                }              
 
             }
 
+            int Ansangel = (int)GetIsoscelesAngle(Pos1,Pos2, box.Location);
 
+            //SevenSegPic.Controls.RemoveAt(3);
+
+            label2.Text = Ansangel.ToString();
         }
 
         private double GetLong(System.Drawing.Point a, System.Drawing.Point b)
@@ -817,7 +849,7 @@ namespace Seven_SegmentTest
 
         private bool IsNearForAnalog(Color aObj, Color bObj)
         {
-            int ColLike = Convert.ToInt32(NearCol.Text);
+            int ColLike = Convert.ToInt32(AnaNearCol.Text);
 
             if (aObj.R <= bObj.R + ColLike && aObj.R >= bObj.R - ColLike &&
                 aObj.G <= bObj.G + ColLike && aObj.G >= bObj.G - ColLike &&
@@ -825,8 +857,11 @@ namespace Seven_SegmentTest
             {
                 return true;
             }
+            else
+            {
 
-            return false;
+                return false;
+            }
 
         }
 
@@ -888,6 +923,33 @@ namespace Seven_SegmentTest
             //m_Graphic.DrawString(strTemp, m_Font, Brushes.White, m_P.X + 10, m_P.Y + 2);
 
             //SevenSegPic1.Refresh();
+        }
+
+        private Bitmap IsNearWhite(Image Cmap)
+        {
+            Bitmap map =new Bitmap(Cmap);
+
+            int w = map.Width;
+            int h = map.Height;
+
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    if (map.GetPixel(i, j).R >= 140 && map.GetPixel(i, j).G >= 140 && map.GetPixel(i, j).B >= 140)
+                    {
+                        map.SetPixel(i, j, Color.White);
+                    }
+                    else
+                    {
+                        map.SetPixel(i, j, Color.Black);
+                    }
+                }
+
+            }
+
+
+            return map;
         }
 
 

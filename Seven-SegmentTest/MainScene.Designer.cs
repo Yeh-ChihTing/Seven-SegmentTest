@@ -40,7 +40,7 @@ namespace Seven_SegmentTest
             this.digitTex = new System.Windows.Forms.TextBox();
             this.digit = new System.Windows.Forms.Label();
             this.ColNear = new System.Windows.Forms.Label();
-            this.ColNearTex = new System.Windows.Forms.TextBox();
+            this.SegNearCol = new System.Windows.Forms.TextBox();
             this.LoopOnOff = new System.Windows.Forms.Button();
             this.LoopCheck = new System.Windows.Forms.Timer(this.components);
             this.statusCheck = new System.Windows.Forms.Timer(this.components);
@@ -55,8 +55,9 @@ namespace Seven_SegmentTest
             this.label1 = new System.Windows.Forms.Label();
             this.AnalogReset = new System.Windows.Forms.Button();
             this.AnalogColBox = new System.Windows.Forms.PictureBox();
-            this.NearCol = new System.Windows.Forms.TextBox();
+            this.AnaNearCol = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.AnaOr7Seg = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.SevenSegPic)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnalogColBox)).BeginInit();
@@ -69,7 +70,7 @@ namespace Seven_SegmentTest
             this.SevenSegPic.InitialImage = null;
             this.SevenSegPic.Location = new System.Drawing.Point(16, 21);
             this.SevenSegPic.Name = "SevenSegPic";
-            this.SevenSegPic.Size = new System.Drawing.Size(616, 344);
+            this.SevenSegPic.Size = new System.Drawing.Size(640, 360);
             this.SevenSegPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.SevenSegPic.TabIndex = 0;
             this.SevenSegPic.TabStop = false;
@@ -82,7 +83,7 @@ namespace Seven_SegmentTest
             this.panel1.Controls.Add(this.SevenSegPic);
             this.panel1.Location = new System.Drawing.Point(18, 19);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(660, 385);
+            this.panel1.Size = new System.Drawing.Size(679, 405);
             this.panel1.TabIndex = 1;
             // 
             // Add7seg
@@ -158,13 +159,13 @@ namespace Seven_SegmentTest
             this.ColNear.TabIndex = 14;
             this.ColNear.Text = "色合い";
             // 
-            // ColNearTex
+            // SegNearCol
             // 
-            this.ColNearTex.Location = new System.Drawing.Point(750, 315);
-            this.ColNearTex.Name = "ColNearTex";
-            this.ColNearTex.Size = new System.Drawing.Size(78, 23);
-            this.ColNearTex.TabIndex = 13;
-            this.ColNearTex.Text = "30";
+            this.SegNearCol.Location = new System.Drawing.Point(750, 315);
+            this.SegNearCol.Name = "SegNearCol";
+            this.SegNearCol.Size = new System.Drawing.Size(78, 23);
+            this.SegNearCol.TabIndex = 13;
+            this.SegNearCol.Text = "30";
             // 
             // LoopOnOff
             // 
@@ -291,13 +292,13 @@ namespace Seven_SegmentTest
             this.AnalogColBox.TabIndex = 27;
             this.AnalogColBox.TabStop = false;
             // 
-            // NearCol
+            // AnaNearCol
             // 
-            this.NearCol.Location = new System.Drawing.Point(203, 522);
-            this.NearCol.Name = "NearCol";
-            this.NearCol.Size = new System.Drawing.Size(38, 23);
-            this.NearCol.TabIndex = 28;
-            this.NearCol.Text = "10";
+            this.AnaNearCol.Location = new System.Drawing.Point(203, 522);
+            this.AnaNearCol.Name = "AnaNearCol";
+            this.AnaNearCol.Size = new System.Drawing.Size(38, 23);
+            this.AnaNearCol.TabIndex = 28;
+            this.AnaNearCol.Text = "10";
             // 
             // label2
             // 
@@ -308,13 +309,24 @@ namespace Seven_SegmentTest
             this.label2.TabIndex = 29;
             this.label2.Text = "label2";
             // 
+            // AnaOr7Seg
+            // 
+            this.AnaOr7Seg.AutoSize = true;
+            this.AnaOr7Seg.Location = new System.Drawing.Point(170, 445);
+            this.AnaOr7Seg.Name = "AnaOr7Seg";
+            this.AnaOr7Seg.Size = new System.Drawing.Size(87, 19);
+            this.AnaOr7Seg.TabIndex = 30;
+            this.AnaOr7Seg.Text = "アナログモード";
+            this.AnaOr7Seg.UseVisualStyleBackColor = true;
+            // 
             // MainScene
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 611);
+            this.Controls.Add(this.AnaOr7Seg);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.NearCol);
+            this.Controls.Add(this.AnaNearCol);
             this.Controls.Add(this.AnalogColBox);
             this.Controls.Add(this.AnalogReset);
             this.Controls.Add(this.label1);
@@ -327,7 +339,7 @@ namespace Seven_SegmentTest
             this.Controls.Add(this.ShowCol);
             this.Controls.Add(this.LoopOnOff);
             this.Controls.Add(this.ColNear);
-            this.Controls.Add(this.ColNearTex);
+            this.Controls.Add(this.SegNearCol);
             this.Controls.Add(this.digit);
             this.Controls.Add(this.digitTex);
             this.Controls.Add(this.Get7Seg);
@@ -359,7 +371,7 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.TextBox digitTex;
         private System.Windows.Forms.Label digit;
         private System.Windows.Forms.Label ColNear;
-        private System.Windows.Forms.TextBox ColNearTex;
+        private System.Windows.Forms.TextBox SegNearCol;
         private System.Windows.Forms.Button LoopOnOff;
         private System.Windows.Forms.Timer LoopCheck;
         private System.Windows.Forms.Timer statusCheck;
@@ -374,8 +386,9 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button AnalogReset;
         private System.Windows.Forms.PictureBox AnalogColBox;
-        private System.Windows.Forms.TextBox NearCol;
+        private System.Windows.Forms.TextBox AnaNearCol;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox AnaOr7Seg;
     }
 }
 
