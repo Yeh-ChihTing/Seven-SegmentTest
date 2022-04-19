@@ -63,6 +63,7 @@ namespace Seven_SegmentTest
 
 
         Int32 LINE = 200;     // 線の長さ
+        Int32 LINE2 = 0;
         const Int32 P_DOT = 5;      // 点Pの円の半径
         const Int32 Q_DOT = 5;      // 点Qの円の半径
         const Int32 O_DOT = 5;      // 点Oの円の半径
@@ -74,6 +75,7 @@ namespace Seven_SegmentTest
         System.Drawing.Point m_P;     // 点Pの座標（PictureBoxの中心）
         System.Drawing.Point m_Q;     // 点Qの座標
         System.Drawing.Point m_O;     // 点Oの座標
+        System.Drawing.Point m_O2;
 
         /// <summary> 
         /// アナログ用関数End
@@ -99,7 +101,7 @@ namespace Seven_SegmentTest
             m_P = new System.Drawing.Point((SevenSegPic.Size.Width / 2), (SevenSegPic.Size.Height / 2));
             m_Q = new System.Drawing.Point((SevenSegPic.Size.Width / 2 + LINE), (SevenSegPic.Size.Height / 2));
             m_O = new System.Drawing.Point();
-
+            m_O2 = new System.Drawing.Point();
             // PictureBoxと同じサイズのビットマップを生成
             //m_Bmp = new Bitmap(SevenSegPic1.Size.Width, SevenSegPic1.Size.Height);
             //SevenSegPic1.Image = m_Bmp;
@@ -710,16 +712,17 @@ namespace Seven_SegmentTest
             m_P = Pos1;
             m_Q = Pos2;
             m_O = new System.Drawing.Point();
+            m_O2 = new System.Drawing.Point();
 
             LINE = ((int)Math.Sqrt((Math.Pow(m_Q.X - m_P.X, 2) + Math.Pow(m_Q.Y - m_P.Y, 2)))/20)*17;
-
-            
+            LINE2 = ((int)Math.Sqrt((Math.Pow(m_Q.X - m_P.X, 2) + Math.Pow(m_Q.Y - m_P.Y, 2))));
+           
 
             int angel=(int)GetIAngel(Pos1, Pos2);
 
             int starPosAngle = angel + 180;
 
-            AnalogBox box = new();
+            
 
             for (int i = 0; i < AnalogAngle; i++)
             {
@@ -746,20 +749,28 @@ namespace Seven_SegmentTest
 
                 if (IsNearForAnalog(col, AnalogColBox.BackColor))
                 {
-                   
-                    SevenSegPic.Controls.Add(box);
-                    box.Location = new System.Drawing.Point(m_O.X, m_O.Y);
-                    box.BackColor = Color.Black;
-                    box.Width = 10;
-                    box.Height = 10;
-                    box.pictureBox1.BackColor = Color.Purple;
+                    //AnalogBox box = new();
+                    //SevenSegPic.Controls.Add(box);
+                    //box.Location = new System.Drawing.Point(m_O.X, m_O.Y);
+                    //box.BackColor = Color.Black;
+                    //box.Width = 10;
+                    //box.Height = 10;
+                    //box.pictureBox1.BackColor = Color.Purple;
                     break;
 
                 }              
 
             }
 
-            int Ansangel = (int)GetIsoscelesAngle(Pos1,Pos2, box.Location);
+            //SevenSegPic.Controls.Add(box);
+            //box.Location = m_O2;
+            //box.BackColor = Color.Black;
+            //box.Width = 10;
+            //box.Height = 10;
+            //box.pictureBox1.BackColor = Color.Purple;
+
+
+            int Ansangel = 180 - (int)GetIsoscelesAngle(Pos1, Pos2, m_O2);
 
             //SevenSegPic.Controls.RemoveAt(3);
 
@@ -889,6 +900,9 @@ namespace Seven_SegmentTest
             double dblRadian = (Math.PI * (double)2) * (dblAngle / (double)360);
             m_O.X = (Int32)(Math.Cos(dblRadian) * (double)LINE) + m_P.X;
             m_O.Y = (Int32)(Math.Sin(dblRadian) * (double)LINE) + m_P.Y;
+
+            m_O2.X = (Int32)(Math.Cos(dblRadian) * (double)LINE2) + m_P.X;
+            m_O2.Y = (Int32)(Math.Sin(dblRadian) * (double)LINE2) + m_P.Y;
             //---------------------------------------------------------------
 
             //// 背景
