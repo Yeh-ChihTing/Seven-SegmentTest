@@ -58,6 +58,14 @@ namespace Seven_SegmentTest
             this.AnaNearCol = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.AnaOr7Seg = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.SetCheckPoint = new System.Windows.Forms.Button();
+            this.CheckPointNum = new System.Windows.Forms.TextBox();
+            this.CheckPointLabel = new System.Windows.Forms.Label();
+            this.PointListBox = new System.Windows.Forms.ListBox();
+            this.AddPoint = new System.Windows.Forms.Button();
+            this.PontAddTex = new System.Windows.Forms.TextBox();
+            this.ClearPointBox = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.SevenSegPic)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnalogColBox)).BeginInit();
@@ -257,7 +265,7 @@ namespace Seven_SegmentTest
             // 
             // AnalogCol
             // 
-            this.AnalogCol.Location = new System.Drawing.Point(170, 493);
+            this.AnalogCol.Location = new System.Drawing.Point(284, 442);
             this.AnalogCol.Name = "AnalogCol";
             this.AnalogCol.Size = new System.Drawing.Size(71, 23);
             this.AnalogCol.TabIndex = 24;
@@ -268,7 +276,7 @@ namespace Seven_SegmentTest
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(327, 497);
+            this.label1.Location = new System.Drawing.Point(157, 536);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 15);
             this.label1.TabIndex = 25;
@@ -286,7 +294,7 @@ namespace Seven_SegmentTest
             // 
             // AnalogColBox
             // 
-            this.AnalogColBox.Location = new System.Drawing.Point(247, 498);
+            this.AnalogColBox.Location = new System.Drawing.Point(361, 447);
             this.AnalogColBox.Name = "AnalogColBox";
             this.AnalogColBox.Size = new System.Drawing.Size(27, 18);
             this.AnalogColBox.TabIndex = 27;
@@ -294,7 +302,7 @@ namespace Seven_SegmentTest
             // 
             // AnaNearCol
             // 
-            this.AnaNearCol.Location = new System.Drawing.Point(203, 522);
+            this.AnaNearCol.Location = new System.Drawing.Point(439, 443);
             this.AnaNearCol.Name = "AnaNearCol";
             this.AnaNearCol.Size = new System.Drawing.Size(38, 23);
             this.AnaNearCol.TabIndex = 28;
@@ -303,7 +311,7 @@ namespace Seven_SegmentTest
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(327, 516);
+            this.label2.Location = new System.Drawing.Point(157, 561);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 15);
             this.label2.TabIndex = 29;
@@ -319,11 +327,92 @@ namespace Seven_SegmentTest
             this.AnaOr7Seg.Text = "アナログモード";
             this.AnaOr7Seg.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(392, 442);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(41, 15);
+            this.label3.TabIndex = 31;
+            this.label3.Text = "色合い";
+            // 
+            // SetCheckPoint
+            // 
+            this.SetCheckPoint.Location = new System.Drawing.Point(252, 493);
+            this.SetCheckPoint.Name = "SetCheckPoint";
+            this.SetCheckPoint.Size = new System.Drawing.Size(75, 23);
+            this.SetCheckPoint.TabIndex = 32;
+            this.SetCheckPoint.Text = "ポイント設置";
+            this.SetCheckPoint.UseVisualStyleBackColor = true;
+            this.SetCheckPoint.Click += new System.EventHandler(this.SetCheckPoint_Click);
+            // 
+            // CheckPointNum
+            // 
+            this.CheckPointNum.Location = new System.Drawing.Point(201, 493);
+            this.CheckPointNum.Name = "CheckPointNum";
+            this.CheckPointNum.Size = new System.Drawing.Size(45, 23);
+            this.CheckPointNum.TabIndex = 33;
+            this.CheckPointNum.Text = "1";
+            // 
+            // CheckPointLabel
+            // 
+            this.CheckPointLabel.AutoSize = true;
+            this.CheckPointLabel.Location = new System.Drawing.Point(146, 497);
+            this.CheckPointLabel.Name = "CheckPointLabel";
+            this.CheckPointLabel.Size = new System.Drawing.Size(49, 15);
+            this.CheckPointLabel.TabIndex = 34;
+            this.CheckPointLabel.Text = "SetNum";
+            // 
+            // PointListBox
+            // 
+            this.PointListBox.FormattingEnabled = true;
+            this.PointListBox.ItemHeight = 15;
+            this.PointListBox.Location = new System.Drawing.Point(333, 497);
+            this.PointListBox.Name = "PointListBox";
+            this.PointListBox.Size = new System.Drawing.Size(100, 79);
+            this.PointListBox.TabIndex = 35;
+            // 
+            // AddPoint
+            // 
+            this.AddPoint.Location = new System.Drawing.Point(440, 552);
+            this.AddPoint.Name = "AddPoint";
+            this.AddPoint.Size = new System.Drawing.Size(75, 23);
+            this.AddPoint.TabIndex = 36;
+            this.AddPoint.Text = "Add";
+            this.AddPoint.UseVisualStyleBackColor = true;
+            this.AddPoint.Click += new System.EventHandler(this.AddPoint_Click);
+            // 
+            // PontAddTex
+            // 
+            this.PontAddTex.Location = new System.Drawing.Point(440, 523);
+            this.PontAddTex.Name = "PontAddTex";
+            this.PontAddTex.Size = new System.Drawing.Size(75, 23);
+            this.PontAddTex.TabIndex = 37;
+            this.PontAddTex.Text = "25";
+            // 
+            // ClearPointBox
+            // 
+            this.ClearPointBox.Location = new System.Drawing.Point(522, 552);
+            this.ClearPointBox.Name = "ClearPointBox";
+            this.ClearPointBox.Size = new System.Drawing.Size(75, 23);
+            this.ClearPointBox.TabIndex = 38;
+            this.ClearPointBox.Text = "Clear";
+            this.ClearPointBox.UseVisualStyleBackColor = true;
+            this.ClearPointBox.Click += new System.EventHandler(this.ClearPointBox_Click);
+            // 
             // MainScene
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 611);
+            this.Controls.Add(this.ClearPointBox);
+            this.Controls.Add(this.PontAddTex);
+            this.Controls.Add(this.AddPoint);
+            this.Controls.Add(this.PointListBox);
+            this.Controls.Add(this.CheckPointLabel);
+            this.Controls.Add(this.CheckPointNum);
+            this.Controls.Add(this.SetCheckPoint);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.AnaOr7Seg);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.AnaNearCol);
@@ -389,6 +478,14 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.TextBox AnaNearCol;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox AnaOr7Seg;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button SetCheckPoint;
+        private System.Windows.Forms.TextBox CheckPointNum;
+        private System.Windows.Forms.Label CheckPointLabel;
+        private System.Windows.Forms.ListBox PointListBox;
+        private System.Windows.Forms.Button AddPoint;
+        private System.Windows.Forms.TextBox PontAddTex;
+        private System.Windows.Forms.Button ClearPointBox;
     }
 }
 

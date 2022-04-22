@@ -33,7 +33,7 @@ namespace Seven_SegmentTest
 
         private bool sevensegadd = false;
 
-        private int SegPointCnt = 0;
+       // private int SegPointCnt = 0;
 
         private bool FirstColSel = true;
 
@@ -57,7 +57,7 @@ namespace Seven_SegmentTest
 
         private bool SetAnalogCol = false;
 
-        private int CntStandPos = 0;
+        //private int CntStandPos = 0;
         private int StandPosMax = 3;
 
 
@@ -76,6 +76,15 @@ namespace Seven_SegmentTest
         System.Drawing.Point m_Q;     // 点Qの座標
         System.Drawing.Point m_O;     // 点Oの座標
         System.Drawing.Point m_O2;
+
+        private bool StartSetPoint = false;
+        private List<int> PointList = new List<int>();
+        private int MaxPoint { get; set; }
+        //private int CntPoint { get; set; }
+        private List<AnalogBox> CheckPointList = new List<AnalogBox>();
+        private List<int> CheckPointAngle = new List<int>();
+
+        private int AnaAnswer { get; set; }
 
         /// <summary> 
         /// アナログ用関数End
@@ -249,7 +258,7 @@ namespace Seven_SegmentTest
             {
 
 
-                if (SegPointCnt < maxSeg)
+                if (SevenCList.Count < maxSeg)
                 {
 
                     sevensegBox box = new();
@@ -259,10 +268,10 @@ namespace Seven_SegmentTest
                     box.Width = 8;// SevenSegPic1.Width / 80;
                     box.Location = e.Location;
                     //MyNumber.Text = Add7SegCnt.ToString();
-                    SegPointCnt++;
+                    //SegPointCnt++;
                     SevenCList.Add(box);
 
-                    if (SegPointCnt == maxSeg)
+                    if (SevenCList.Count == maxSeg)
                     {
                         List<sevensegBox> Sbox = new();
                         for (int i = 0; i < SevenCList.Count; i++)
@@ -271,7 +280,7 @@ namespace Seven_SegmentTest
                         }
 
                         //cntNumOfSevenSeg++;
-                        SegPointCnt = 0;
+                       // SegPointCnt = 0;
                         AllSegList.Add(Sbox);
                         //SevenCList.Clear();
 
@@ -293,17 +302,17 @@ namespace Seven_SegmentTest
                 
              
 
-                if (CntStandPos < StandPosMax)
+                if (AllAnaBox.Count < StandPosMax)
                 {
                     AnalogBox Abox = new();
                     SevenSegPic.Controls.Add(Abox);
                     Abox.Width = 4;
                     Abox.Height = 4;
                     Abox.Location = e.Location;
-                    CntStandPos++;
+                    //CntStandPos++;
                     AllAnaBox.Add(Abox);
 
-                    if (CntStandPos == StandPosMax)
+                    if (AllAnaBox.Count == StandPosMax)
                     {
                         StartAnalogSet = false;
                     }
@@ -311,6 +320,27 @@ namespace Seven_SegmentTest
                 }
 
 
+            }
+
+            if (StartSetPoint)
+            {
+                if (CheckPointList.Count < MaxPoint)
+                {
+                    AnalogBox Abox = new();
+                    SevenSegPic.Controls.Add(Abox);
+                    Abox.Width = 4;
+                    Abox.Height = 4;
+                    Abox.Location = e.Location;
+                    Abox.pictureBox1.BackColor = Color.Purple;
+                    //CntPoint++;
+                    CheckPointList.Add(Abox);
+
+                    if (CheckPointList.Count == MaxPoint)
+                    {
+                        StartAnalogSet = false;
+                    }
+                }
+                
             }
         }
         private void ClearAllSeg_Click(object sender, EventArgs e)
@@ -326,7 +356,7 @@ namespace Seven_SegmentTest
             //SevenSegPic1.Controls.Clear();
             
            // SevenCList.Clear();
-            SegPointCnt = 0;
+            //SegPointCnt = 0;
 
             AllSegList.Clear();
 
@@ -722,13 +752,14 @@ namespace Seven_SegmentTest
 
             int starPosAngle = angel + 180;
 
-            
+            Bitmap BackImage = new Bitmap(IsNearWhite(SevenSegPic.Image));
 
             for (int i = 0; i < AnalogAngle; i++)
             {
                 GetOPos(starPosAngle+i);
                 //Get7Pic = SevenSegPic.Image;
-                Bitmap BackImage = new Bitmap(SevenSegPic.Image);
+                
+                
                 int r, g, b;
 
                 r = BackImage.GetPixel(m_O.X,m_O.Y).R;
@@ -770,11 +801,73 @@ namespace Seven_SegmentTest
             //box.pictureBox1.BackColor = Color.Purple;
 
 
-            int Ansangel = 180 - (int)GetIsoscelesAngle(Pos1, Pos2, m_O2);
+            int Anaangel = 180 - (int)GetIsoscelesAngle(Pos1, Pos2, m_O2);
 
             //SevenSegPic.Controls.RemoveAt(3);
 
-            label2.Text = Ansangel.ToString();
+            
+
+            CheckPointAngle.Clear();
+
+            for (int i = 0; i < CheckPointList.Count; i++)
+            {
+               
+                System.Drawing.Point Pos = new System.Drawing.Point(CheckPointList[i].Location.X + w, CheckPointList[i].Location.Y + h);
+                int angle=180- (int)GetIsoscelesAngle(Pos1, Pos2, Pos);
+                CheckPointAngle.Add(angle);
+
+            }
+            //PointList.Clear();
+            //PointList.Add(25);
+            //PointList.Add(50);
+            //PointList.Add(75);
+            if (PointList.Count == MaxPoint)
+            {
+
+                for (int i = 0; i < PointList.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        if (Anaangel <= CheckPointAngle[i] && Anaangel >= 0)
+                        {
+                            if (Anaangel + 4 >= CheckPointAngle[i] && Anaangel - 4 <= CheckPointAngle[i])
+                            {
+                                AnaAnswer = PointList[i];
+                            }
+                            else
+                            {
+                                AnaAnswer = (PointList[i] / CheckPointAngle[i]) * Anaangel;
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        if (Anaangel <= CheckPointAngle[i] && Anaangel > CheckPointAngle[i - 1])
+                        {
+                            if (Anaangel + 3 >= CheckPointAngle[i] && Anaangel - 3 <= CheckPointAngle[i])
+                            {
+                                AnaAnswer = PointList[i];
+                            }
+                            else
+                            {
+                                int range = PointList[i] - PointList[i - 1];
+                                double Onefor = (double)(CheckPointAngle[i] - CheckPointAngle[i - 1]) / (double)range;
+                                int plusAngle = Anaangel - CheckPointAngle[i - 1];
+                                AnaAnswer = (int)(Onefor * plusAngle) + PointList[i - 1];
+                            }
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("ポイント設置を完成してください。");
+            }
+
+            label2.Text = AnaAnswer.ToString();
+
         }
 
         private double GetLong(System.Drawing.Point a, System.Drawing.Point b)
@@ -848,8 +941,11 @@ namespace Seven_SegmentTest
 
             StartAnalogSet = false;
 
-            CntStandPos = 0;
+           // CntStandPos = 0;
             AllAnaBox.Clear();
+
+            CheckPointList.Clear();
+
 
         }
 
@@ -904,39 +1000,6 @@ namespace Seven_SegmentTest
             m_O2.X = (Int32)(Math.Cos(dblRadian) * (double)LINE2) + m_P.X;
             m_O2.Y = (Int32)(Math.Sin(dblRadian) * (double)LINE2) + m_P.Y;
             //---------------------------------------------------------------
-
-            //// 背景
-            //m_Graphic.FillRectangle(Brushes.Black, 0, 0, SevenSegPic1.Width, SevenSegPic1.Height);
-
-            //// 点Pを中心にした半径LINEの円を描く
-            //m_Graphic.DrawEllipse(Pens.YellowGreen, m_P.X - LINE, m_P.Y - LINE, LINE * 2, LINE * 2);
-
-            //// 点Pを描く
-            //m_Graphic.FillEllipse(Brushes.Yellow, m_P.X - P_DOT, m_P.Y - P_DOT, P_DOT * 2, P_DOT * 2);
-            //m_Graphic.DrawString("P", m_Font, Brushes.Yellow, m_P.X - P_DOT - 2, m_P.Y - P_DOT - 10);
-
-            //// 点Qを描く
-            //m_Graphic.FillEllipse(Brushes.Orange, m_Q.X - Q_DOT, m_Q.Y - Q_DOT, Q_DOT * 2, Q_DOT * 2);
-            //m_Graphic.DrawString("Q", m_Font, Brushes.Orange, m_Q.X + Q_DOT + 2, m_Q.Y);
-
-            //// 点Oを描く
-            //m_Graphic.FillEllipse(Brushes.Tomato, m_O.X - O_DOT, m_O.Y - O_DOT, O_DOT * 2, O_DOT * 2);
-            //m_Graphic.DrawString("O", m_Font, Brushes.Tomato, m_O.X + O_DOT, m_O.Y + 2);
-
-            //// 点P～点Qの線を描く
-            //m_Graphic.DrawLine(Pens.SkyBlue, m_P, m_Q);
-
-            //// 点P～点Oの線を描く
-            //m_Graphic.DrawLine(Pens.SkyBlue, m_P, m_O);
-
-            //// 円弧の描画
-            //m_Graphic.DrawArc(Pens.SkyBlue, m_P.X - LINE, m_P.Y - LINE, LINE * 2, LINE * 2, 0, (float)dblAngle);
-
-            //// 角度を描画
-            //String strTemp = String.Format("{0}度", dblAngle);
-            //m_Graphic.DrawString(strTemp, m_Font, Brushes.White, m_P.X + 10, m_P.Y + 2);
-
-            //SevenSegPic1.Refresh();
         }
 
         private Bitmap IsNearWhite(Image Cmap)
@@ -966,6 +1029,23 @@ namespace Seven_SegmentTest
             return map;
         }
 
+        private void SetCheckPoint_Click(object sender, EventArgs e)
+        {
+            StartSetPoint = true;
+            MaxPoint = Convert.ToInt32(CheckPointNum.Text);
+            //CntPoint = 0;
+        }
 
+        private void AddPoint_Click(object sender, EventArgs e)
+        {
+            PointListBox.Items.Add(PontAddTex.Text);
+            PointList.Add(Convert.ToInt32(PontAddTex.Text));
+        }
+
+        private void ClearPointBox_Click(object sender, EventArgs e)
+        {
+            PointListBox.Items.Clear();
+            PointList.Clear();
+        }
     }
 }
