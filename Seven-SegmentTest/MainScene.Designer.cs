@@ -52,7 +52,6 @@ namespace Seven_SegmentTest
             this.SetAnalogPos = new System.Windows.Forms.Button();
             this.AnalogCheck = new System.Windows.Forms.Button();
             this.AnalogCol = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.AnalogReset = new System.Windows.Forms.Button();
             this.AnalogColBox = new System.Windows.Forms.PictureBox();
             this.AnaNearCol = new System.Windows.Forms.TextBox();
@@ -60,15 +59,23 @@ namespace Seven_SegmentTest
             this.AnaOr7Seg = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SetCheckPoint = new System.Windows.Forms.Button();
-            this.CheckPointNum = new System.Windows.Forms.TextBox();
             this.CheckPointLabel = new System.Windows.Forms.Label();
             this.PointListBox = new System.Windows.Forms.ListBox();
             this.AddPoint = new System.Windows.Forms.Button();
             this.PontAddTex = new System.Windows.Forms.TextBox();
             this.ClearPointBox = new System.Windows.Forms.Button();
+            this.CheckPointNum = new System.Windows.Forms.Label();
+            this.Gamma = new System.Windows.Forms.Timer(this.components);
+            this.GammaBar = new System.Windows.Forms.TrackBar();
+            this.GammaOn = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.LightBar = new System.Windows.Forms.TrackBar();
+            this.LightBarNum = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.SevenSegPic)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnalogColBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GammaBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LightBar)).BeginInit();
             this.SuspendLayout();
             // 
             // SevenSegPic
@@ -207,8 +214,9 @@ namespace Seven_SegmentTest
             // 
             // ShowAns
             // 
+            this.ShowAns.Font = new System.Drawing.Font("Yu Gothic UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ShowAns.FormattingEnabled = true;
-            this.ShowAns.ItemHeight = 15;
+            this.ShowAns.ItemHeight = 30;
             this.ShowAns.Location = new System.Drawing.Point(720, 348);
             this.ShowAns.Name = "ShowAns";
             this.ShowAns.Size = new System.Drawing.Size(120, 94);
@@ -273,15 +281,6 @@ namespace Seven_SegmentTest
             this.AnalogCol.UseVisualStyleBackColor = true;
             this.AnalogCol.Click += new System.EventHandler(this.AnalogCol_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(157, 536);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 15);
-            this.label1.TabIndex = 25;
-            this.label1.Text = "label1";
-            // 
             // AnalogReset
             // 
             this.AnalogReset.Location = new System.Drawing.Point(13, 536);
@@ -294,6 +293,7 @@ namespace Seven_SegmentTest
             // 
             // AnalogColBox
             // 
+            this.AnalogColBox.BackColor = System.Drawing.Color.Black;
             this.AnalogColBox.Location = new System.Drawing.Point(361, 447);
             this.AnalogColBox.Name = "AnalogColBox";
             this.AnalogColBox.Size = new System.Drawing.Size(27, 18);
@@ -311,11 +311,12 @@ namespace Seven_SegmentTest
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(157, 561);
+            this.label2.Font = new System.Drawing.Font("Yu Gothic UI", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label2.Location = new System.Drawing.Point(146, 523);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 15);
+            this.label2.Size = new System.Drawing.Size(154, 37);
             this.label2.TabIndex = 29;
-            this.label2.Text = "label2";
+            this.label2.Text = "アナログ数値";
             // 
             // AnaOr7Seg
             // 
@@ -330,7 +331,7 @@ namespace Seven_SegmentTest
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(392, 442);
+            this.label3.Location = new System.Drawing.Point(392, 447);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 15);
             this.label3.TabIndex = 31;
@@ -345,14 +346,6 @@ namespace Seven_SegmentTest
             this.SetCheckPoint.Text = "ポイント設置";
             this.SetCheckPoint.UseVisualStyleBackColor = true;
             this.SetCheckPoint.Click += new System.EventHandler(this.SetCheckPoint_Click);
-            // 
-            // CheckPointNum
-            // 
-            this.CheckPointNum.Location = new System.Drawing.Point(201, 493);
-            this.CheckPointNum.Name = "CheckPointNum";
-            this.CheckPointNum.Size = new System.Drawing.Size(45, 23);
-            this.CheckPointNum.TabIndex = 33;
-            this.CheckPointNum.Text = "1";
             // 
             // CheckPointLabel
             // 
@@ -400,17 +393,81 @@ namespace Seven_SegmentTest
             this.ClearPointBox.UseVisualStyleBackColor = true;
             this.ClearPointBox.Click += new System.EventHandler(this.ClearPointBox_Click);
             // 
+            // CheckPointNum
+            // 
+            this.CheckPointNum.AutoSize = true;
+            this.CheckPointNum.Location = new System.Drawing.Point(201, 497);
+            this.CheckPointNum.Name = "CheckPointNum";
+            this.CheckPointNum.Size = new System.Drawing.Size(13, 15);
+            this.CheckPointNum.TabIndex = 39;
+            this.CheckPointNum.Text = "0";
+            // 
+            // Gamma
+            // 
+            this.Gamma.Tick += new System.EventHandler(this.Gamma_Tick);
+            // 
+            // GammaBar
+            // 
+            this.GammaBar.Location = new System.Drawing.Point(570, 471);
+            this.GammaBar.Maximum = 300;
+            this.GammaBar.Name = "GammaBar";
+            this.GammaBar.Size = new System.Drawing.Size(104, 45);
+            this.GammaBar.TabIndex = 41;
+            // 
+            // GammaOn
+            // 
+            this.GammaOn.AutoSize = true;
+            this.GammaOn.Location = new System.Drawing.Point(486, 479);
+            this.GammaOn.Name = "GammaOn";
+            this.GammaOn.Size = new System.Drawing.Size(78, 19);
+            this.GammaOn.TabIndex = 42;
+            this.GammaOn.Text = "ガンマ補正";
+            this.GammaOn.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(483, 447);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(36, 15);
+            this.label1.TabIndex = 43;
+            this.label1.Text = "明るさ";
+            // 
+            // LightBar
+            // 
+            this.LightBar.Location = new System.Drawing.Point(525, 430);
+            this.LightBar.Maximum = 30;
+            this.LightBar.Minimum = -20;
+            this.LightBar.Name = "LightBar";
+            this.LightBar.Size = new System.Drawing.Size(104, 45);
+            this.LightBar.TabIndex = 45;
+            this.LightBar.Scroll += new System.EventHandler(this.LightBar_Scroll);
+            // 
+            // LightBarNum
+            // 
+            this.LightBarNum.AutoSize = true;
+            this.LightBarNum.Location = new System.Drawing.Point(631, 443);
+            this.LightBarNum.Name = "LightBarNum";
+            this.LightBarNum.Size = new System.Drawing.Size(13, 15);
+            this.LightBarNum.TabIndex = 46;
+            this.LightBarNum.Text = "0";
+            // 
             // MainScene
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 611);
+            this.Controls.Add(this.LightBarNum);
+            this.Controls.Add(this.LightBar);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.GammaOn);
+            this.Controls.Add(this.GammaBar);
+            this.Controls.Add(this.CheckPointNum);
             this.Controls.Add(this.ClearPointBox);
             this.Controls.Add(this.PontAddTex);
             this.Controls.Add(this.AddPoint);
             this.Controls.Add(this.PointListBox);
             this.Controls.Add(this.CheckPointLabel);
-            this.Controls.Add(this.CheckPointNum);
             this.Controls.Add(this.SetCheckPoint);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.AnaOr7Seg);
@@ -418,7 +475,6 @@ namespace Seven_SegmentTest
             this.Controls.Add(this.AnaNearCol);
             this.Controls.Add(this.AnalogColBox);
             this.Controls.Add(this.AnalogReset);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.AnalogCol);
             this.Controls.Add(this.AnalogCheck);
             this.Controls.Add(this.SetAnalogPos);
@@ -443,6 +499,8 @@ namespace Seven_SegmentTest
             ((System.ComponentModel.ISupportInitialize)(this.SevenSegPic)).EndInit();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.AnalogColBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GammaBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LightBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -472,7 +530,6 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.Button SetAnalogPos;
         private System.Windows.Forms.Button AnalogCheck;
         private System.Windows.Forms.Button AnalogCol;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button AnalogReset;
         private System.Windows.Forms.PictureBox AnalogColBox;
         private System.Windows.Forms.TextBox AnaNearCol;
@@ -480,12 +537,18 @@ namespace Seven_SegmentTest
         private System.Windows.Forms.CheckBox AnaOr7Seg;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button SetCheckPoint;
-        private System.Windows.Forms.TextBox CheckPointNum;
         private System.Windows.Forms.Label CheckPointLabel;
         private System.Windows.Forms.ListBox PointListBox;
         private System.Windows.Forms.Button AddPoint;
         private System.Windows.Forms.TextBox PontAddTex;
         private System.Windows.Forms.Button ClearPointBox;
+        private System.Windows.Forms.Label CheckPointNum;
+        private System.Windows.Forms.Timer Gamma;
+        private System.Windows.Forms.TrackBar GammaBar;
+        private System.Windows.Forms.CheckBox GammaOn;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TrackBar LightBar;
+        private System.Windows.Forms.Label LightBarNum;
     }
 }
 

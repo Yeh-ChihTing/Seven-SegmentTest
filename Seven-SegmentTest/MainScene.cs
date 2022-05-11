@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -84,7 +85,13 @@ namespace Seven_SegmentTest
         private List<AnalogBox> CheckPointList = new List<AnalogBox>();
         private List<int> CheckPointAngle = new List<int>();
 
+       // private int CntPoint { get; set; }
+
         private int AnaAnswer { get; set; }
+
+        private double GetGamma = 0.0f;
+
+
 
         /// <summary> 
         /// アナログ用関数End
@@ -111,6 +118,8 @@ namespace Seven_SegmentTest
             m_Q = new System.Drawing.Point((SevenSegPic.Size.Width / 2 + LINE), (SevenSegPic.Size.Height / 2));
             m_O = new System.Drawing.Point();
             m_O2 = new System.Drawing.Point();
+
+            //CntPoint = 0;
             // PictureBoxと同じサイズのビットマップを生成
             //m_Bmp = new Bitmap(SevenSegPic1.Size.Width, SevenSegPic1.Size.Height);
             //SevenSegPic1.Image = m_Bmp;
@@ -125,7 +134,10 @@ namespace Seven_SegmentTest
             /// </summary>
             VideoCapture vc = new();
 
-
+            if (!Directory.Exists("SaveData"))
+            {
+                Directory.CreateDirectory("SaveData");
+            }
 
             /// <summary>
             /// カメラの稼働処理
@@ -159,12 +171,21 @@ namespace Seven_SegmentTest
                               //取得した画像をMATに変換
                               img = vc.RetrieveMat();
 
+                              if (GammaOn.Checked)
+                              {
+                                  byte[] lut = new byte[256];
+                                  for (int i = 0; i < lut.Length; i++)
+                                  {
+                                      lut[i] = (byte)(Math.Pow(i / 255.0, 1.0 / GetGamma) * 255.0);
+                                  }
+                                  Cv2.LUT(img, lut, img);
+                              }
+
                               //変換したMatをbitmapに変換そしてカメライメージとして表示
                               CameraImg = img.ToBitmap();
 
-
                           }
-                      }
+                      } 
 
                   });
 
@@ -220,6 +241,13 @@ namespace Seven_SegmentTest
                 AnalogColBox.BackColor = Color.FromArgb(color.R, color.G, color.B);
 
             }
+
+            //if (SevenSegPic != null)
+            //{
+            //    Color colorb = ((Bitmap)SevenSegPic.Image).GetPixel(e.X, e.Y);
+
+            //    label1.Text = colorb.ToString();
+            //}
         }
 
 
@@ -248,7 +276,7 @@ namespace Seven_SegmentTest
                // this.Cursor = Cursors.Default;
 
                 //AnalogBox.DefaultBackColor=
-                label1.Text = AnalogColBox.BackColor.ToString();
+                //label1.Text = AnalogColBox.BackColor.ToString();
                 SetAnalogCol = false;
 
             }
@@ -621,7 +649,15 @@ namespace Seven_SegmentTest
                     //AnsList.Add(Show7Seg);
                     ShowAns.Items.Add(Show7Seg);
 
+                    try
+                    {
+                        SaveDataOnCsv(Convert.ToDouble(Show7Seg), "7セグ:"+ (cnt+ 1).ToString());
+                    }
+                    catch
+                    {
 
+                    }
+                    
                 }
 
             }
@@ -684,6 +720,8 @@ namespace Seven_SegmentTest
                     SevenSegPic.Image = IsNearWhite(CameraImg);
                 }
             }
+
+            GetGamma = ((float)GammaBar.Value) / 100;
             // スライドの値を取得
             //double dblAngle = (double)trackBar1.Value;
 
@@ -776,7 +814,7 @@ namespace Seven_SegmentTest
                 //boxx.Height = 3;
                 //boxx.pictureBox1.BackColor = Color.Blue;
 
-               
+
 
                 if (IsNearForAnalog(col, AnalogColBox.BackColor))
                 {
@@ -789,7 +827,7 @@ namespace Seven_SegmentTest
                     //box.pictureBox1.BackColor = Color.Purple;
                     break;
 
-                }              
+                }
 
             }
 
@@ -830,13 +868,13 @@ namespace Seven_SegmentTest
                     {
                         if (Anaangel <= CheckPointAngle[i] && Anaangel >= 0)
                         {
-                            if (Anaangel + 4 >= CheckPointAngle[i] && Anaangel - 4 <= CheckPointAngle[i])
+                            if (Anaangel + 2 >= CheckPointAngle[i] && Anaangel - 2 <= CheckPointAngle[i])
                             {
                                 AnaAnswer = PointList[i];
                             }
                             else
                             {
-                                AnaAnswer = (PointList[i] / CheckPointAngle[i]) * Anaangel;
+                                AnaAnswer = (int)(((double)PointList[i] / (double)CheckPointAngle[i]) * Anaangel);
                             }
                         }
                     }
@@ -845,16 +883,16 @@ namespace Seven_SegmentTest
                     {
                         if (Anaangel <= CheckPointAngle[i] && Anaangel > CheckPointAngle[i - 1])
                         {
-                            if (Anaangel + 3 >= CheckPointAngle[i] && Anaangel - 3 <= CheckPointAngle[i])
+                            if (Anaangel + 2 >= CheckPointAngle[i] && Anaangel - 2 <= CheckPointAngle[i])
                             {
                                 AnaAnswer = PointList[i];
                             }
                             else
                             {
                                 int range = PointList[i] - PointList[i - 1];
-                                double Onefor = (double)(CheckPointAngle[i] - CheckPointAngle[i - 1]) / (double)range;
-                                int plusAngle = Anaangel - CheckPointAngle[i - 1];
-                                AnaAnswer = (int)(Onefor * plusAngle) + PointList[i - 1];
+                                double Onefor = (double)range / (double)(CheckPointAngle[i] - CheckPointAngle[i - 1]);
+                                double plusAngle = (double)(Anaangel - CheckPointAngle[i - 1]);
+                                AnaAnswer = (int)(Math.Floor(Onefor * plusAngle)) + PointList[i - 1];
                             }
 
                         }
@@ -867,6 +905,8 @@ namespace Seven_SegmentTest
             }
 
             label2.Text = AnaAnswer.ToString();
+
+            SaveDataOnCsv(AnaAnswer, "アナログ");
 
         }
 
@@ -908,7 +948,7 @@ namespace Seven_SegmentTest
             //h = Math.Sqrt(Math.Pow(b.X - Center.X, 2) + Math.Pow(b.Y - Center.Y, 2));
             h = GetLong(b, Center);
             //ans = (180-(Math.Atan(w / h) * 180.0 / Math.PI)-90)*2;
-            ans = (Math.Acos(h / w) * 180.0 / Math.PI)*2;
+            ans = (Math.Acos(h / w) * 180.0 / Math.PI) * 2;
 
             return ans;
         }
@@ -946,12 +986,13 @@ namespace Seven_SegmentTest
 
             CheckPointList.Clear();
 
-
         }
 
         private void AnalogCol_Click(object sender, EventArgs e)
         {
-            SetAnalogCol = true;
+            //SetAnalogCol = true;
+            AnalogColBox.BackColor = Color.Black;
+
         }
 
         private bool IsNearForAnalog(Color aObj, Color bObj)
@@ -962,12 +1003,15 @@ namespace Seven_SegmentTest
                 aObj.G <= bObj.G + ColLike && aObj.G >= bObj.G - ColLike &&
                 aObj.B <= bObj.B + ColLike && aObj.B >= bObj.B - ColLike)
             {
+
                 return true;
+
             }
             else
             {
 
                 return false;
+
             }
 
         }
@@ -981,8 +1025,6 @@ namespace Seven_SegmentTest
             double dblRadian = (Math.PI * (double)2) * (angle / (double)360);
             ans.X = (Int32)(Math.Cos(dblRadian) * LINE) + a.X;
             ans.Y = (Int32)(Math.Sin(dblRadian) * LINE) + a.Y;
-
-
 
             return ans;
         }
@@ -1004,35 +1046,84 @@ namespace Seven_SegmentTest
 
         private Bitmap IsNearWhite(Image Cmap)
         {
-            Bitmap map =new Bitmap(Cmap);
+            Bitmap map = new Bitmap(Cmap);
 
             int w = map.Width;
             int h = map.Height;
+            //int r, g, b;
+            int Light = LightBar.Value;
+            //int downsome = 12;
+
+            //using (var src = BitmapConverter.ToMat(map))
+            //using (var hsv = new Mat())
+            //{
+
+            //    Cv2.CvtColor(src, hsv, ColorConversionCodes.BGR2RGBA);
+
+            //    var channels = Cv2.Split(hsv);
+
+            //    map = BitmapConverter.ToBitmap(hsv);
+
+            //}
+
+            byte[,] data = new byte[w, h];
+            byte[,] brightdata = new byte[w, h];
+
 
             for (int i = 0; i < w; i++)
             {
                 for (int j = 0; j < h; j++)
                 {
-                    if (map.GetPixel(i, j).R >= 140 && map.GetPixel(i, j).G >= 140 && map.GetPixel(i, j).B >= 140)
+                    data[i, j] = (byte)((map.GetPixel(i, j).R + map.GetPixel(i, j).G + map.GetPixel(i, j).B) / 3);
+
+                    if (data[i, j] + Light >= 256)
                     {
-                        map.SetPixel(i, j, Color.White);
+                        brightdata[i, j] = 255;
+                    }
+                    else if (data[i, j] + Light < 0)
+                    {
+                        brightdata[i, j] = 0;
                     }
                     else
                     {
-                        map.SetPixel(i, j, Color.Black);
+                        brightdata[i, j] = (byte)(data[i, j] + Light);
                     }
+
+                    map.SetPixel(i, j, Color.FromArgb(brightdata[i, j], brightdata[i, j], brightdata[i, j]));
+
                 }
 
             }
 
 
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+
+                    if (map.GetPixel(i, j).R >= 135 && map.GetPixel(i, j).G >= 135 && map.GetPixel(i, j).B >= 135)
+                    {
+                        map.SetPixel(i, j, Color.White);
+                    }
+                    //else if (map.GetPixel(i, j).R >= 100 && map.GetPixel(i, j).G >= 100 && map.GetPixel(i, j).B >= 100)
+                    //{
+                    //    map.SetPixel(i, j, Color.Gray);
+                    //}
+                    else
+                    {
+                        map.SetPixel(i, j, Color.Black);
+                    }
+                }
+            }
+
             return map;
+
         }
 
         private void SetCheckPoint_Click(object sender, EventArgs e)
         {
             StartSetPoint = true;
-            MaxPoint = Convert.ToInt32(CheckPointNum.Text);
+            MaxPoint = PointListBox.Items.Count;// Convert.ToInt32(CheckPointNum.Text);
             //CntPoint = 0;
         }
 
@@ -1040,12 +1131,141 @@ namespace Seven_SegmentTest
         {
             PointListBox.Items.Add(PontAddTex.Text);
             PointList.Add(Convert.ToInt32(PontAddTex.Text));
+            //CntPoint++;
+            CheckPointNum.Text = PointListBox.Items.Count.ToString();
         }
 
         private void ClearPointBox_Click(object sender, EventArgs e)
         {
             PointListBox.Items.Clear();
             PointList.Clear();
+            //CntPoint = 0;
+            CheckPointNum.Text = PointListBox.Items.Count.ToString();
+        }
+
+        private void Gamma_Tick(object sender, EventArgs e)
+        {
+            ////自動ガンマ調整
+            //if (StarGamamCheck)
+            //{
+            //    //カメラ画像
+            //    Bitmap bmp = new Bitmap(img.ToBitmap());
+
+            //    for (int i = 0; i < img.Width; i++)
+            //    {
+            //        //ピクセル単位でRGB値を取得
+            //        for (int j = 0; j < img.Height; j++)
+            //        {
+            //            NowR.Add(bmp.GetPixel(i, j).R);
+            //            NowG.Add(bmp.GetPixel(i, j).G);
+            //            NowB.Add(bmp.GetPixel(i, j).B);
+            //        }
+            //    }
+
+
+            //    //全画素平均RGB値を取得
+            //    int AvgR = (int)NowR.Average();
+            //    int AvgG = (int)NowG.Average();
+            //    int AvgB = (int)NowB.Average();
+
+            //    //RGB値の平均
+            //    double Avg = (((double)AvgR + (double)AvgG + (double)AvgB) / 3.0) / 100.0;
+            //    double GetAvg = Math.Round(Avg, 2, MidpointRounding.AwayFromZero);
+            //}
+        }
+
+        private void SaveDataOnCsv(double ans,string ObjName=null)
+        {
+            //今日の日を取得
+            DateTime dt = new DateTime();
+            dt = DateTime.Now;
+
+            //if (DataName.Text == "")
+            //{
+            //    DataName.Text = "監視データ";
+            //}
+
+            //データ名
+            string Path = "SaveData/監視データ.csv";
+            StreamWriter sw;
+
+            //データ存在確認
+
+            //存在してない
+            if (!File.Exists(Path))
+            {
+                sw = new StreamWriter(Path, false, Encoding.GetEncoding("utf-8"));
+
+                sw.WriteLine("時間" +
+                    "," +
+                    "装置名" +
+                    "," +
+                    "判定結果");
+
+                string Print="";
+
+                Print += DateTime.Now.ToString();
+                //今の時間を書く
+               // sw.WriteLine(DateTime.Now);
+
+                if (ObjName != null)
+                {
+                    Print += ",";
+                    Print += ObjName;
+                    Print += ",";
+                }
+                else
+                {
+                    Print += ",";
+                    Print += " ";
+                    Print += ",";
+                    //sw.WriteLine(" ");
+                }
+                Print += ans;
+
+                sw.WriteLine(Print);
+
+            }
+
+            //既に保存データ存在の場合
+            else
+            {
+                //ファイル開く
+                sw = File.AppendText(Path);
+                //現在時間を書く
+
+                string Print = "";
+
+                Print += DateTime.Now.ToString();
+                //今の時間を書く
+                // sw.WriteLine(DateTime.Now);
+
+                if (ObjName != null)
+                {
+                    Print += ",";
+                    Print += ObjName;
+                    Print += ",";
+
+                }
+                else
+                {
+                    Print += ",";
+                    Print += " ";
+                    Print += ",";
+                    //sw.WriteLine(" ");
+                }
+                Print += ans;
+
+                sw.WriteLine(Print);
+
+            }
+            //保存終了
+            sw.Close();
+        }
+
+        private void LightBar_Scroll(object sender, EventArgs e)
+        {
+            LightBarNum.Text = LightBar.Value.ToString(); ;
         }
     }
 }
